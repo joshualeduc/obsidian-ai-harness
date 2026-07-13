@@ -1,0 +1,23 @@
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Obsidian local settings (only ignore user workspace and cache, keep template configs if any)
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/cache/
+*.sync-conflict-*
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
