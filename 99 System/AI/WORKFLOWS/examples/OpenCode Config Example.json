@@ -1,0 +1,27 @@
+{
+  "instructions": [
+    "99 System/AI/VAULT-PURPOSE.md"
+  ],
+  "references": [
+    "99 System/AI/ME.md",
+    "99 System/AI/GOALS.md"
+  ],
+  "agent": "research-assistant",
+  "permission": {
+    "edit": {
+      "*": "deny",
+      "01 Projects/*": "allow",
+      "02 Literature Notes/*": "allow",
+      "03 Drafts/*": "allow",
+      "000 Homepage.md": "allow",
+      "*99 System/AI/*": "ask"
+    }
+  },
+  "formatter": false,
+  "lsp": {},
+  "tools": {
+    "batch": "deny",
+    "fetch": "deny",
+    "todiff": "deny"
+  }
+}
