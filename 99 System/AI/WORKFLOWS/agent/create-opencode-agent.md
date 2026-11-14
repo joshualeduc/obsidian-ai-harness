@@ -13,29 +13,37 @@ To interview the user and generate specialized OpenCode AI agents (as Markdown f
     - **Description:** A short sentence describing what the agent does.
     - **Mode:** Should this be a `primary` agent (user-facing chat) or a `subagent` (invoked by other agents in the background)?
     - **System Prompt:** What are the specific instructions, tone, and behavioral guardrails for this agent?
-    - **Permissions:** Does the agent need access to edit files, run bash commands, or fetch from the web? (By default, minimize permissions).
+    - **Permissions:** Does the agent need access to edit files, run shell commands, or fetch from the web? (By default, minimize permissions).
 
 ### 2. File Generation
 - **Generate Agent File:** Create the agent definition file at `99 System/AI/AGENTS/[agent-name].md`.
-- **Apply Formatting:** Use the standard OpenCode markdown format with YAML frontmatter:
+- **Apply Formatting:** Use the OpenCode V2 markdown format with YAML frontmatter. `permissions` is an ordered list in which **the last matching rule wins**, so put broad rules before exceptions:
   ```markdown
   ---
   description: [Agent Description]
   mode: [primary or subagent]
-  permission:
-    edit: [allow/deny/ask]
-    bash: [allow/deny/ask]
-    webfetch: [allow/deny/ask]
+  permissions:
+    - action: edit
+      resource: "*"
+      effect: [allow/deny/ask]
+    - action: shell
+      resource: "*"
+      effect: [allow/deny/ask]
+    - action: webfetch
+      resource: "*"
+      effect: [allow/deny/ask]
   ---
   
   [System Prompt Content]
   ```
+- Optional fields: `color` (six-digit hex, quoted, e.g. `"#ff6b6b"`) and `model` (`provider/model`).
+- **Use V2 fields only:** `permissions` and `shell`, not the V1 `permission`, `bash`, `tools`, or `prompt`. The markdown body is the system prompt.
 
 ### 3. Verification & Feedback
 - **Present Draft:** Show the generated `[agent-name].md` to the user for review.
 - **Refine:** Make any requested adjustments based on their feedback.
 
 ## 🛑 Guardrails
-- **Minimal Permissions:** Always default permissions (`edit`, `bash`, `webfetch`) to `deny` unless the user explicitly requests otherwise based on the agent's role.
+- **Minimal Permissions:** Always default permissions (`edit`, `shell`, `webfetch`) to `deny` unless the user explicitly requests otherwise based on the agent's role.
 - **Vault Alignment:** Ensure the agent's system prompt aligns with the rules and anti-patterns defined in `VAULT-PURPOSE.md`.
 - **Markdown Extension:** Ensure the agent is saved as a `.md` file, as this is required by OpenCode.

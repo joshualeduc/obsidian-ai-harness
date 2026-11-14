@@ -27,4 +27,4 @@ To provide tailored assistance, you must always maintain awareness of the user's
 - **Current Goals:** Refer to `99 System/AI/GOALS.md`.
 
 ## 🛠️ SKILLS & WORKFLOWS
-You have access to a suite of specific workflows and skills located in `.agents/skills/`. Use these skills when prompted by the user to execute standardized processes for this vault.
+You have access to a suite of specific workflows and skills located in `99 System/AI/SKILLS/`. Use these skills when prompted by the user to execute standardized processes for this vault.
