@@ -14,7 +14,7 @@ To bootstrap a new Obsidian vault:
    > *"Set up my vault using the `bootstrap` workflow."*
 4. **Follow the Prompts:** The AI will execute a sequence of idempotent workflows to structure your folders, interview you to create `VAULT-PURPOSE.md`, dynamically build necessary templates, generate your primary vault agent, and customize all AI skills.
 5. **Repairing & Syncing:** If you ever migrate your vault to a new device (e.g., via Obsidian Sync) and find that your AI tools cannot discover your skills, simply ask your AI to run the `init` workflow again. It will safely regenerate all required symlinks without overwriting your data.
-6. **Platforms Without Symlinks:** Android shared storage (including the Android Terminal app's Linux VM and Termux) can't hold symlinks at all, and Windows needs Developer Mode or an administrator shell to create them. `init` tests for this first. If links aren't possible, it stops and explains the alternatives instead of copying files, so `99 System/AI/` stays the single source of truth.
+6. **Platforms Without Symlinks:** Android shared storage (including the Android Terminal app's Linux VM and Termux) can't hold symlinks at all, and Windows needs Developer Mode or an administrator shell to create them. `init` tests for this first. If links aren't possible, it stops and explains the alternatives instead of copying files, so `99 System/AI/` stays the single source of truth. For the Android Terminal app's Linux VM, `99 System/AI/PLATFORMS/android-vm/` provides the files with bind mounts instead; see its `README.md`.
 
 ## 🧠 Core Philosophy & Requirements
 
