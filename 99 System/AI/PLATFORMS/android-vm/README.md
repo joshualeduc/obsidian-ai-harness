@@ -6,15 +6,19 @@ Android shared storage can't hold symlinks, so the `init` workflow can't link th
 
 | Appears at | From `99 System/AI/` | Replaces `init`'s |
 |---|---|---|
-| `.agents/skills` | `SKILLS` | per-skill symlinks |
+| `.agents/skills` | `SKILLS` | per-skill symlinks (OpenCode, Antigravity) |
+| `.claude/skills` | `SKILLS` | per-skill symlinks (Claude Code) |
 | `.opencode/agents` | `AGENTS` | per-agent symlinks |
 | `.opencode/commands` | `COMMANDS` | per-command symlinks |
 | `.opencode/opencode.json` | `SETTINGS/opencode.json` | root `opencode.json` |
-| `.claude/CLAUDE.md` | `VAULT-MAP.md` | root `CLAUDE.md` |
+| `.claude/CLAUDE.md` | `VAULT-MAP.md` | root `CLAUDE.md` (Claude Code) |
+| `.agents/AGENTS.md` | `VAULT-MAP.md` | root `AGENTS.md` (Antigravity) |
 
-There is no root `AGENTS.md`. The script writes `.opencode/opencode.jsonc`, which loads `VAULT-MAP.md` through OpenCode's `instructions` setting. Tools that read only a root `AGENTS.md` won't see the vault map in the VM.
+There is no root `AGENTS.md`. OpenCode has no hidden location for it, so the script writes `.opencode/opencode.jsonc`, which loads `VAULT-MAP.md` through OpenCode's `instructions` setting. Other tools that read only a root `AGENTS.md` won't see the vault map in the VM.
 
-Everything sits inside hidden folders, which Obsidian Sync ignores. A few small placeholder files stay on shared storage: `{}` at `.opencode/opencode.json`, an empty `.claude/CLAUDE.md`, and the generated `.opencode/opencode.jsonc`.
+Start Antigravity's `agy` at the vault root. Outside a git repository it treats its starting folder as the workspace, so from a subfolder it finds neither `.agents/AGENTS.md` nor the skills. Claude Code and OpenCode find them from any subfolder.
+
+Everything sits inside hidden folders, which Obsidian Sync ignores. A few small placeholder files stay on shared storage: `{}` at `.opencode/opencode.json`, empty `.claude/CLAUDE.md` and `.agents/AGENTS.md`, and the generated `.opencode/opencode.jsonc`.
 
 ## Installing
 

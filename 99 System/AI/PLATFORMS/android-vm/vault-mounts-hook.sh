@@ -9,15 +9,17 @@
 #
 # It bind-mounts what `init` would symlink, all inside hidden folders that
 # Obsidian Sync ignores, so nothing new syncs to other devices:
-#   99 System/AI/SKILLS                 -> .agents/skills
+#   99 System/AI/SKILLS                 -> .agents/skills  (OpenCode, Antigravity)
+#   99 System/AI/SKILLS                 -> .claude/skills  (Claude Code)
 #   99 System/AI/AGENTS                 -> .opencode/agents
 #   99 System/AI/COMMANDS               -> .opencode/commands
 #   99 System/AI/SETTINGS/opencode.json -> .opencode/opencode.json
-#   99 System/AI/VAULT-MAP.md           -> .claude/CLAUDE.md
+#   99 System/AI/VAULT-MAP.md           -> .claude/CLAUDE.md  (Claude Code)
+#   99 System/AI/VAULT-MAP.md           -> .agents/AGENTS.md  (Antigravity)
 # and writes .opencode/opencode.jsonc, which loads VAULT-MAP.md as OpenCode
-# instructions in place of the root AGENTS.md symlink. That path is absolute
-# because OpenCode looks up relative `instructions` only in the folder it
-# starts in, not from vault subfolders.
+# instructions in place of the root AGENTS.md symlink; OpenCode has no hidden
+# location for it. That path is absolute because OpenCode looks up relative
+# `instructions` only in the folder it starts in, not from vault subfolders.
 #
 # A vault without "99 System/AI" is left alone. Rerunning is safe: it skips
 # what is already mounted and remounts a file whose source was replaced (a
@@ -83,8 +85,10 @@ write_opencode_instructions() {
 }
 
 bind_dir "$AI/SKILLS" "$VAULT/.agents/skills"
+bind_dir "$AI/SKILLS" "$VAULT/.claude/skills"
 bind_dir "$AI/AGENTS" "$VAULT/.opencode/agents"
 bind_dir "$AI/COMMANDS" "$VAULT/.opencode/commands"
 bind_file "$AI/SETTINGS/opencode.json" "$VAULT/.opencode/opencode.json" '{}'
 bind_file "$AI/VAULT-MAP.md" "$VAULT/.claude/CLAUDE.md" ''
+bind_file "$AI/VAULT-MAP.md" "$VAULT/.agents/AGENTS.md" ''
 write_opencode_instructions

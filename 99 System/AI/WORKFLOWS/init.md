@@ -1,7 +1,7 @@
 # Workflow: Initialize Vault Structure & AI Symlinks
 
 ## 🎯 Purpose
-To scaffold a new Obsidian vault with a standard folder structure and bootstrap it so that AI coding tools (OpenCode, Claude Code, Gemini CLI, Cursor, etc.) can discover the vault's skills, agents, commands, and agent configuration via symbolic links.
+To scaffold a new Obsidian vault with a standard folder structure and bootstrap it so that AI coding tools (OpenCode, Claude Code, Antigravity, Gemini CLI, Cursor, etc.) can discover the vault's skills, agents, commands, and agent configuration via symbolic links.
 
 ## 📋 Prerequisites
 - You are operating from the **root** of the vault directory.
@@ -38,20 +38,22 @@ To scaffold a new Obsidian vault with a standard folder structure and bootstrap 
     - **Windows:** creating symlinks requires Developer Mode or an administrator shell. Enable one, then run this workflow again. In Git Bash, also set `MSYS=winsymlinks:nativestrict` so `ln -s` creates real links instead of copies.
     - **Anything else** (network drives, some cloud-sync folders, FAT/exFAT drives): move the vault to a local disk that supports symlinks, or provide the links from a system that can.
 
-### 3. Create the `.agents/skills/`, `.opencode/agents/`, and `.opencode/commands/` Directories
+### 3. Create the Hidden Tool Directories
 - Create the hidden directory structures that AI tools scan for skill, agent, and command definitions:
     ```bash
     mkdir -p .agents/skills
+    mkdir -p .claude/skills
     mkdir -p .opencode/agents
     mkdir -p .opencode/commands
     ```
 
-### 4. Symlink All Skills into `.agents/skills/`
-- Each skill folder inside `99 System/AI/SKILLS/` must be symlinked into `.agents/skills/` so tools can discover them. Because all skills are flat in this directory, a simple loop links them all:
+### 4. Symlink All Skills into `.agents/skills/` and `.claude/skills/`
+- Each skill folder inside `99 System/AI/SKILLS/` must be symlinked into `.agents/skills/` (read by OpenCode, Antigravity, and Gemini CLI) and `.claude/skills/` (the only skills folder Claude Code reads). Because all skills are flat in this directory, a simple loop links them all:
     ```bash
     for skill in "99 System/AI/SKILLS"/*; do
       if [ -d "$skill" ]; then
         ln -sfn "../../$skill" ".agents/skills/$(basename "$skill")"
+        ln -sfn "../../$skill" ".claude/skills/$(basename "$skill")"
       fi
     done
     ```
@@ -83,7 +85,7 @@ To scaffold a new Obsidian vault with a standard folder structure and bootstrap 
 ### 7. Remove Stale Links
 - If a skill, agent, or command was renamed or deleted under `99 System/AI/`, its old link is left dangling. Remove links whose target no longer exists:
     ```bash
-    for link in .agents/skills/* .opencode/agents/* .opencode/commands/*; do
+    for link in .agents/skills/* .claude/skills/* .opencode/agents/* .opencode/commands/*; do
       if [ -L "$link" ] && [ ! -e "$link" ]; then
         rm "$link"
       fi
@@ -106,11 +108,12 @@ To scaffold a new Obsidian vault with a standard folder structure and bootstrap 
 
 - **Cross-Tool Compatibility:**
   Different AI coding assistants expect slightly different configurations. The `AGENTS.md` file serves as the universal minimum.
-    - **Claude Code**: Reads `CLAUDE.md`. Create a symlink so both tools share the same source of truth:
+    - **Claude Code**: Reads `CLAUDE.md` and `.claude/skills/` (linked in Step 4). Create a symlink so both tools share the same source of truth:
         ```bash
         ln -sfn AGENTS.md CLAUDE.md
         ```
-    - **Gemini CLI**: Reads `AGENTS.md` and `.agents/skills/` natively. No additional symlinks needed. MCP servers can be configured in `.gemini/settings.json`.
+    - **Antigravity (agy)**: Reads `AGENTS.md` and `.agents/skills/` natively. No additional symlinks needed. Tell the user to **start agy at the vault root**: outside a git repository it treats its starting folder as the workspace, so from a subfolder it finds neither `AGENTS.md` nor the skills.
+    - **Gemini CLI**: Reads `.agents/skills/` natively, and `AGENTS.md` once `context.fileName` in `.gemini/settings.json` includes it. MCP servers can be configured there too.
     - **Cursor / Zed / Codex**: All read `AGENTS.md` natively. Skill support varies per tool, but they all support standard MCP configurations.
 
 ### 10. Next Steps
