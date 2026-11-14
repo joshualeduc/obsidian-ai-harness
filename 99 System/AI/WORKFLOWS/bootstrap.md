@@ -10,6 +10,7 @@ Execute the following workflows in exact order. **Crucially, this sequence is id
 ### 1. `init`
 - **Check:** Do the internal system folders (e.g., `99 System/AI/CHANGE/`) and symlinks exist?
 - **Action:** Run the `init.md` workflow to create symlinks and the folder scaffold.
+- **If `init` reports that symlinks aren't supported:** continue with the remaining steps. They only create vault content, which doesn't depend on the links. Repeat the warning in the Final Summary.
 
 ### 2. `create-vault-purpose`
 - **Check:** Does `99 System/AI/VAULT-PURPOSE.md` exist?
