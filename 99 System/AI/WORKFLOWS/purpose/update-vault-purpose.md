@@ -1,7 +1,7 @@
 # Workflow: Update Vault Purpose
 
 ## 🎯 Purpose
-To revisit and update an existing `VAULT-PURPOSE.md` to reflect shifts in the user's focus, domains, or AI preferences without starting the bootstrapping process from scratch.
+To revisit and update an existing `VAULT-PURPOSE.md` to reflect shifts in the user's focus, domains, or AI preferences without rerunning `create-harness` from scratch.
 
 ## 🛠️ Execution Steps
 

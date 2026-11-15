@@ -1,4 +1,4 @@
-# Workflow: Create Identity & Context (Bootstrapping)
+# Workflow: Create Identity & Context (Onboarding)
 
 ## 🎯 Purpose
 To initialize the AI's understanding of a new user by generating the foundational `ME.md` and `GOALS.md` files. This ensures the AI can immediately act as a personalized and empathetic Executive Assistant.

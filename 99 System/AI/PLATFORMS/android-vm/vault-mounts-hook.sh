@@ -1,13 +1,13 @@
 #!/bin/bash
 # 99 System/AI/PLATFORMS/android-vm/vault-mounts-hook.sh
 #
-# Android Terminal app (Debian VM) stand-in for the `init` workflow's
+# Android Terminal app (Debian VM) stand-in for the `connect-device` workflow's
 # symlinks, which Android shared storage can't hold. Run as root, after the
 # vault is mounted at its usual path inside the VM:
 #
 #   vault-mounts-hook.sh <vault-path> <user>
 #
-# It bind-mounts what `init` would symlink, all inside hidden folders that
+# It bind-mounts what `connect-device` would symlink, all inside hidden folders that
 # Obsidian Sync ignores, so nothing new syncs to other devices:
 #   99 System/AI/SKILLS                 -> .agents/skills  (OpenCode, Antigravity)
 #   99 System/AI/SKILLS                 -> .claude/skills  (Claude Code)

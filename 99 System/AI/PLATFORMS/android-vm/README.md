@@ -1,10 +1,10 @@
 # Android Terminal VM
 
-Android shared storage can't hold symlinks, so the `init` workflow can't link this vault's AI files when the vault lives there and is used from the Android Terminal app's Debian VM (at `/mnt/shared/...`). `vault-mounts-hook.sh` provides the same files with bind mounts instead.
+Android shared storage can't hold symlinks, so the `connect-device` workflow can't link this vault's AI files when the vault lives there and is used from the Android Terminal app's Debian VM (at `/mnt/shared/...`). `vault-mounts-hook.sh` provides the same files with bind mounts instead.
 
 ## What it does
 
-| Appears at | From `99 System/AI/` | Replaces `init`'s |
+| Appears at | From `99 System/AI/` | Replaces `connect-device`'s |
 |---|---|---|
 | `.agents/skills` | `SKILLS` | per-skill symlinks (OpenCode, Antigravity) |
 | `.claude/skills` | `SKILLS` | per-skill symlinks (Claude Code) |
