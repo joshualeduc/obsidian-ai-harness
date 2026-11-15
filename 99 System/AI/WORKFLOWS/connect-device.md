@@ -23,7 +23,18 @@ Run it on every device that will use the vault with AI tools. Obsidian Sync does
     ```
 - **If supported:** continue with Step 2.
 - **If not supported:** skip Steps 2–8 and go to Step 9. **Do not copy files instead** (see Guardrails). Tell the user that this location can't hold symlinks, that their AI tools won't find the vault's skills, agents, commands, `AGENTS.md`, or `opencode.json` until the links are provided another way, and which case below seems to apply:
-    - **Android shared storage** (e.g. the Android Terminal app's Linux VM, or Termux, working on a vault in `/storage/emulated/...` or `/mnt/shared/...`): Android's storage rejects all links. In the Android Terminal app's VM, `99 System/AI/PLATFORMS/android-vm/vault-mounts-hook.sh` provides them with bind mounts instead; point the user to the `README.md` beside it for installation (root required). In Termux, keep a local folder whose entries are symlinks into shared storage.
+    - **Android Terminal app's Linux VM** (a vault in `/mnt/shared/...`, or bind-mounted from there into the home folder): Android's storage rejects all links, so `99 System/AI/PLATFORMS/android-vm/vault-mounts-hook.sh` provides them with bind mounts instead. Its setup needs root, so **you only check and report; the user runs every `sudo` command.** Run this read-only check from the vault root:
+        ```bash
+        bash "99 System/AI/PLATFORMS/android-vm/vault-mounts-status.sh"
+        ```
+        Its first line is the status; relay the lines after it to the user exactly as printed:
+        - `OK`: this device is already connected. Nothing else to do.
+        - `HOOK_MISSING` or `HOOK_OUTDATED`: read `vault-mounts-hook.sh` and summarize for the user what it does, since it will run as root at every boot. Then give them the printed commands to run themselves.
+        - `NOT_MOUNTED`: give the user the printed command to rerun the hook.
+        - `NO_SERVICE`: this VM has nothing that runs vault hooks at boot. Point the user to the `README.md` beside the script.
+
+        When the user says they've run the commands, run the check again and report the new status. **Never run `sudo` yourself, write your own mount or sync script, or copy files to work around this.** The hook and the check are the whole fallback.
+    - **Termux or other Android file access** (a vault in `/storage/emulated/...`): keep a local folder whose entries are symlinks into shared storage.
     - **Windows:** creating symlinks requires Developer Mode or an administrator shell. Enable one, then run this workflow again. In Git Bash, also set `MSYS=winsymlinks:nativestrict` so `ln -s` creates real links instead of copies.
     - **Anything else** (network drives, some cloud-sync folders, FAT/exFAT drives): move the vault to a local disk that supports symlinks, or provide the links from a system that can.
 
@@ -110,6 +121,7 @@ Run it on every device that will use the vault with AI tools. Obsidian Sync does
 
 ## 🛑 Guardrails
 - **Symlinks only — never copy.** The source of truth for all skills, agents, commands, and agent config lives under `99 System/AI/`. Symlinks ensure a single source of truth with no drift. If symlinks aren't supported (Step 1), report it and stop linking; copies would silently go stale.
+- **No improvised fallbacks.** Where symlinks don't work, use only the fallback Step 1 names for that platform. Never write new scripts, run `sudo`, or edit system files (`/etc/...`, systemd units, fstab) yourself; give the user the commands instead.
 - **Always `ln -sfn`, never plain `ln -sf`.** The `-n` flag is what makes the symlink steps truly idempotent. Without it, re-running a loop against an existing symlink-to-directory nests a new broken link *inside* the source folder instead of replacing the link.
 - **Idempotent Folders:** Use `mkdir -p` so that if folders already exist, the command simply succeeds without error.
 - **Relative paths.** Always use relative symlink targets so the vault remains portable across machines.

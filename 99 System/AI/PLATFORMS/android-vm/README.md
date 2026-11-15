@@ -20,6 +20,24 @@ Start Antigravity's `agy` at the vault root. Outside a git repository it treats 
 
 Everything sits inside hidden folders, which Obsidian Sync ignores. A few small placeholder files stay on shared storage: `{}` at `.opencode/opencode.json`, empty `.claude/CLAUDE.md` and `.agents/AGENTS.md`, and the generated `.opencode/opencode.jsonc`.
 
+## Checking a device
+
+`vault-mounts-status.sh` reports whether this device is connected, and the exact commands to fix it if not. It only reads, so it needs no root and is what the `connect-device` workflow has agents run:
+
+```bash
+bash "99 System/AI/PLATFORMS/android-vm/vault-mounts-status.sh" [vault-path]
+```
+
+| Status | Meaning |
+|---|---|
+| `OK` | The installed hook matches this vault's copy and every mount is in place. |
+| `HOOK_MISSING` | Nothing in `/etc/vault-mounts.d/` is a copy of the hook. Install it (below). |
+| `HOOK_OUTDATED` | The installed hook differs from this vault's copy. Reinstall it. |
+| `NOT_MOUNTED` | The hook is current but mounts are missing or stale. Rerun it. |
+| `NO_SERVICE` | `/etc/vault-mounts.d/` doesn't exist, so nothing runs hooks at boot. Set up such a service first (below). |
+
+The commands it prints use `sudo` and are for you to run, not an agent.
+
 ## Installing
 
 The script runs as root, after the vault is mounted inside the VM:
@@ -35,7 +53,13 @@ sudo install -d /etc/vault-mounts.d
 sudo install -m 755 "<vault>/99 System/AI/PLATFORMS/android-vm/vault-mounts-hook.sh" /etc/vault-mounts.d/harness
 ```
 
-One installed copy serves every vault, and vaults without `99 System/AI` are skipped. Reinstall after this script changes.
+Then run the installed copy once, so you don't have to wait for a reboot (the status check prints this command with your paths filled in):
+
+```bash
+sudo /etc/vault-mounts.d/harness <vault-path> "$USER"
+```
+
+One installed copy serves every vault, and vaults without `99 System/AI` are skipped. Reinstall after this script changes; the status check reports `HOOK_OUTDATED` until you do.
 
 ## Keeping it current
 

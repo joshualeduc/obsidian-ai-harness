@@ -20,7 +20,7 @@ Execute the following workflows in exact order. **Crucially, this sequence is id
 ### 2. `connect-device`
 - **Check:** Do the tool links (e.g., `AGENTS.md`, `.agents/skills/`) exist?
 - **Action:** Run the `connect-device.md` workflow to link the vault's AI files for this device's tools.
-- **If `connect-device` reports that symlinks aren't supported:** continue with the remaining steps. They only create vault content, which doesn't depend on the links. Repeat the warning in the Final Summary.
+- **If `connect-device` reports that symlinks aren't supported:** use only the fallback it describes, and never run `sudo` or write your own scripts for it. Then continue with the remaining steps. They only create vault content, which doesn't depend on the links. Repeat the warning in the Final Summary.
 
 ### 3. `create-vault-purpose`
 - **Check:** Does `99 System/AI/VAULT-PURPOSE.md` exist?
